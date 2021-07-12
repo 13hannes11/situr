@@ -1,3 +1,9 @@
+import numpy as np
+from PIL import Image, ImageDraw
+from skimage import img_as_float
+from skimage.feature import blob_dog
+
+
 def extend_dim(array):
     ones = np.ones((array.shape[0], 1))
     return np.append(array, ones, axis=1)
