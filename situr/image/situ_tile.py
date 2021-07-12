@@ -18,6 +18,12 @@ class Tile:
             self.images.append(
                 SituImage(situ_image_list, nucleaus_channel=nucleaus_channel))
 
+    def get_round_count(self):
+        return len(self.images)
+
+    def get_channel_count(self):
+        return self.images.get_channel_count(self)
+
     def get_round(self, round_number):
         """This 
 
