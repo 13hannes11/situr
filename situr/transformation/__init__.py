@@ -1,1 +1,1 @@
-from .channel_transformation import ChannelTransform, ScaleRotateTranslateChannelTransform
+from .channel_transformation import ChannelTransform, IdentityChannelTransform, ScaleRotateTranslateChannelTransform

@@ -13,6 +13,10 @@ class ChannelTransform:
             self.__class__.__name__ + '.apply_transformation')
 
 
+class IdentityChannelTransform(ChannelTransform):
+    def apply_transformation(self, situ_img, channel):
+        pass
+
 class ScaleRotateTranslateChannelTransform(ChannelTransform):
     def __init__(self, transform_matrix, scale=1, offset=np.array([0, 0])):
         # TODO: check

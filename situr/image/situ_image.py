@@ -3,6 +3,8 @@ from PIL import Image, ImageDraw
 from skimage import img_as_float
 from skimage.feature import blob_dog
 
+from situr.transformation.channel_transformation import IdentityChannelTransform
+
 
 def extend_dim(array):
     ones = np.ones((array.shape[0], 1))
@@ -33,11 +35,22 @@ class SituImage:
         self.files = file_list
         self.data = None
         self.nucleaus_channel = nucleaus_channel
+        self.channel_transformations = [
+            IdentityChannelTransform() for file in file_list
+        ]
 
     def get_data(self):
         if self.data is None:
             self._load_image()
+            # TODO: apply transformations
         return self.data
+
+    def apply_transformations():
+        # TODO: implement
+        pass
+
+    def set_channel_transformation(self, channel, transformation):
+        self.channel_transformations[channel] = transformation
 
     def get_channel_count(self):
         return self.get_data().shape[0]
@@ -110,6 +123,8 @@ class SituImage:
         Returns:
             np.array: The peaks found by this method as np.array of shape (n, 2)
         '''
+        # TODO: think of a better way to declare peak finding parameters (so they don't need to be passedaround as much)
+
         img = img_as_float(self.get_data()[channel, focus_level, :, :])
         peaks = blob_dog(img, min_sigma=min_sigma,
                          max_sigma=max_sigma, threshold=threshold)
