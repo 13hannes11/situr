@@ -15,6 +15,19 @@ def remove_dim(array):
     return array[:, :-1]
 
 
+class PeakFinderDifferenceOfGaussian:
+    def __init__(self, min_sigma=0.75, max_sigma=3, threshold=0.1):
+        self.min_sigma = min_sigma
+        self.max_sigma = max_sigma
+        self.threshold = threshold
+
+    def find_peaks(self, img_array):
+        img = img_as_float(img_array)
+        peaks = blob_dog(img, min_sigma=self.min_sigma,
+                         max_sigma=self.max_sigma, threshold=self.threshold)
+        return peaks[:, 0:2]
+
+
 class SituImage:
     """
     A class to representing one situ image with different focus levels.
@@ -38,6 +51,7 @@ class SituImage:
         self.channel_transformations = [
             IdentityChannelTransform() for file in file_list
         ]
+        self.peak_finder = PeakFinderDifferenceOfGaussian()
 
     def get_data(self):
         if self.data is None:
@@ -114,23 +128,12 @@ class SituImage:
                 The channel that should be used when printing
             focus_level (int) default: 0:
                 The focus level that should be used
-            min_sigma (float) default: 0.75:
-                The minimum standard deviation for Gaussian kernel. Keep this low to detect smaller blobs. The standard deviations of the Gaussian filter are given for each axis as a sequence, or as a single number, in which case it is equal for all axes.
-            max_sigma (float) default: 3:
-                The maximum standard deviation for Gaussian kernel. Keep this high to detect larger blobs. The standard deviations of the Gaussian filter are given for each axis as a sequence, or as a single number, in which case it is equal for all axes.
-            threshold (float) default: 0.1:
-                The absolute lower bound for scale space maxima. Local maxima smaller than thresh are ignored. Reduce this to detect blobs with less intensities.
         Returns:
             np.array: The peaks found by this method as np.array of shape (n, 2)
         '''
-        # TODO: think of a better way to declare peak finding parameters (so they don't need to be passedaround as much)
+        return self.peak_finder.find_peaks(self.get_data()[channel, focus_level, :, :])
 
-        img = img_as_float(self.get_data()[channel, focus_level, :, :])
-        peaks = blob_dog(img, min_sigma=min_sigma,
-                         max_sigma=max_sigma, threshold=threshold)
-        return peaks[:, 0:2]
-
-    def show_channel_peaks(self, channel, focus_level=0, min_sigma=0.75, max_sigma=3, threshold=0.1):
+    def show_channel_peaks(self, channel, focus_level=0):
         '''
         Returns and shows the found. Uses get_channel_peaks internally.
 
@@ -139,17 +142,11 @@ class SituImage:
                 The channel that should be used when printing
             focus_level (int) default: 0:
                 The focus level that should be used
-            min_sigma (float) default: 0.75:
-                The minimum standard deviation for Gaussian kernel. Keep this low to detect smaller blobs. The standard deviations of the Gaussian filter are given for each axis as a sequence, or as a single number, in which case it is equal for all axes.
-            max_sigma (float) default: 3:
-                The maximum standard deviation for Gaussian kernel. Keep this high to detect larger blobs. The standard deviations of the Gaussian filter are given for each axis as a sequence, or as a single number, in which case it is equal for all axes.
-            threshold (float) default: 0.1:
-                The absolute lower bound for scale space maxima. Local maxima smaller than thresh are ignored. Reduce this to detect blobs with less intensities.
         Returns:
             image: The image of the specified focus level and channel with encircled peaks.
         '''
         peaks = self.get_channel_peaks(
-            channel, focus_level, min_sigma, max_sigma, threshold)
+            channel, focus_level)
 
         img = Image.fromarray(self.get_data()[channel, focus_level, :, :])
         draw = ImageDraw.Draw(img)
