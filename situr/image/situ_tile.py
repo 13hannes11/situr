@@ -25,6 +25,9 @@ class Tile:
         # TODO: implement (first apply channel transformations then round transformations)
         pass
 
+    def get_image_round(self, round):
+        return self.images[round]
+
     def set_round_transformation(self, round, transformation):
         self.round_transformations[round] = transformation
 
@@ -32,7 +35,7 @@ class Tile:
         return len(self.images)
 
     def get_channel_count(self):
-        return self.images.get_channel_count(self)
+        return self.images[0].get_channel_count()
 
     def get_round(self, round_number):
         """This 

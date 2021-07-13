@@ -3,13 +3,12 @@ import open3d as o3
 from probreg import filterreg
 
 from situr.image import extend_dim
-from situr.transformation import ScaleRotateTranslateChannelTransform
 
 
 class RegistrationFunction:
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, transormation_type=ScaleRotateTranslateChannelTransform):
+    def __init__(self, transormation_type):
         self.transormation_type = transormation_type
 
     @abc.abstractmethod

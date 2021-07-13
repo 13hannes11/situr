@@ -69,6 +69,20 @@ class SituImage:
     def get_channel_count(self):
         return self.get_data().shape[0]
 
+    def get_focus_level_count(self):
+        return self.get_data().shape[1]
+
+    def get_focus_level(self, channel, focus_level):
+        """Loads channel and focus level of an image.
+
+        Args:
+            channel (int): The channel to be used
+            focus_level (int): The focus level to be used
+        Returns: 
+            numpy.array: The loaded image of shape (width, height)
+        """
+        return self.get_data()[channel, focus_level, :, :]
+
     def get_channel(self, channel):
         '''
         Loads and returns the specified channel for all focus_levels.

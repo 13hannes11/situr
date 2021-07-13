@@ -1,8 +1,10 @@
-from situr.registration import Registration
-from situr.transformation import IdentityChannelTransform
+from situr.registration import Registration, FilterregRegistrationFunction
+from situr.transformation import ScaleRotateTranslateChannelTransform
 
 
 class ChannelRegistration(Registration):
+    def __init__(self, registration_function=FilterregRegistrationFunction(ScaleRotateTranslateChannelTransform)):
+        super().__init__(registration_function)
     def do_channel_registration(self, situ_img, reference_channel=0):
         # For each channel (except nucleus) compute transform compared to reference_channel
         # Add Channel transformation to Channel
