@@ -1,2 +1,4 @@
+import abc
+
 class Transform:
-    pass
+    __metaclass__ = abc.ABCMeta

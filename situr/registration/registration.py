@@ -33,5 +33,6 @@ class FilterregRegistrationFunction(RegistrationFunction):
 
 
 class Registration:
+    __metaclass__ = abc.ABCMeta
     def __init__(self, registration_function: RegistrationFunction):
         self.registration_function = registration_function
