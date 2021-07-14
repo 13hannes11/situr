@@ -21,8 +21,16 @@ class Tile:
                 SituImage(situ_image_list, nucleaus_channel=nucleaus_channel))
             self.round_transformations.append(IdentityRoundTransform())
 
-    def apply_transformations():
+    def apply_transformations(self):
         # TODO: implement (first apply channel transformations then round transformations)
+        pass
+
+    def apply_channel_transformations(self):
+        # TODO: implement
+        pass
+
+    def apply_round_transformations(self):
+        # TODO: implement
         pass
 
     def get_image_round(self, round):
