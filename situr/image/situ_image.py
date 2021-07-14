@@ -63,8 +63,8 @@ class SituImage:
         return self.data
 
     def apply_transformations(self):
-        # TODO: implement
-        pass
+        for i, transformation in enumerate(self.channel_transformations):
+            transformation.apply_transformation(self, i)
 
     def set_channel_transformation(self, channel: int, transformation: ChannelTransform):
         self.channel_transformations[channel] = transformation

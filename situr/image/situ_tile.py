@@ -25,16 +25,17 @@ class Tile:
             self.round_transformations.append(IdentityRoundTransform())
 
     def apply_transformations(self):
-        # TODO: implement (first apply channel transformations then round transformations)
-        pass
+        # first apply channel transformations then round transformations
+        self.apply_channel_transformations()
+        self.apply_round_transformations()
 
     def apply_channel_transformations(self):
-        # TODO: implement
-        pass
+        for i in range(self.get_round_count()):
+            self.images[i].apply_transformations()
 
     def apply_round_transformations(self):
-        # TODO: implement
-        pass
+        for round, transformation in enumerate(self.round_transformations):
+            transformation.apply_tranformation(self, round)
 
     def set_round_transformation(self, round, transformation: RoundTransform):
         self.round_transformations[round] = transformation
