@@ -1,2 +1,3 @@
 from .channel_transformation import ChannelTransform, IdentityChannelTransform, ScaleRotateTranslateChannelTransform
 from .round_transformation import RoundTransform, IdentityRoundTransform, ScaleRotateTranslateRoundTransform
+from .transformation import Transform

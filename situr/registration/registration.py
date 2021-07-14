@@ -1,14 +1,17 @@
 import abc
+from situr.transformation.channel_transformation import ChannelTransform
+from situr.transformation.round_transformation import RoundTransform
 import open3d as o3
 from probreg import filterreg
+import numpy as np
 
 from situr.image import extend_dim
-
+from situr.transformation import Transform
 
 class RegistrationFunction:
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, transormation_type):
+    def __init__(self, transormation_type: Transform):
         self.transormation_type = transormation_type
 
     @abc.abstractmethod
@@ -17,7 +20,7 @@ class RegistrationFunction:
 
 
 class FilterregRegistrationFunction(RegistrationFunction):
-    def do_registration(self, data_peaks, reference_peaks):
+    def do_registration(self, data_peaks: np.ndarray, reference_peaks: np.ndarray) -> Transform:
         source = o3.geometry.PointCloud()
         source.points = o3.utility.Vector3dVector(extend_dim(data_peaks))
         target = o3.geometry.PointCloud()
@@ -30,5 +33,5 @@ class FilterregRegistrationFunction(RegistrationFunction):
 
 
 class Registration:
-    def __init__(self, registration_function):
+    def __init__(self, registration_function: RegistrationFunction):
         self.registration_function = registration_function

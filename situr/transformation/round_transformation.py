@@ -2,9 +2,10 @@ import abc
 import scipy
 import numpy as np
 from situr.image import situ_image
+from situr.transformation import Transform
 
 
-class RoundTransform:
+class RoundTransform(Transform):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod

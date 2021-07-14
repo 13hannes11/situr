@@ -2,8 +2,10 @@ import abc
 import numpy as np
 import scipy
 
+from situr.transformation import Transform
 
-class ChannelTransform:
+
+class ChannelTransform(Transform):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod

@@ -1,12 +1,13 @@
-from situr.registration import Registration, FilterregRegistrationFunction
-from situr.transformation import ScaleRotateTranslateRoundTransform
+from situr.registration import Registration, RegistrationFunction, FilterregRegistrationFunction
+from situr.transformation import RoundTransform, ScaleRotateTranslateRoundTransform
+from situr.image import Tile
 
 
 class RoundRegistration(Registration):
-    def __init__(self, registration_function=FilterregRegistrationFunction(ScaleRotateTranslateRoundTransform)):
+    def __init__(self, registration_function: RegistrationFunction[RoundTransform] = FilterregRegistrationFunction(ScaleRotateTranslateRoundTransform)):
         super().__init__(registration_function)
 
-    def do_round_registration(self, situ_tile, reference_round=0, reference_channel=0):
+    def do_round_registration(self, situ_tile: Tile, reference_round: int = 0, reference_channel: int = 0):
         """This method generates a round registration transformation for a tile and saves it in the tile. 
 
         Args:
