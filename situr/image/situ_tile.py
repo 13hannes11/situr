@@ -1,8 +1,7 @@
-from situr.transformation.round_transformation import RoundTransform
+from situr.transformation import Transform, IdentityTransform
 import numpy as np
 
 from situr.image.situ_image import SituImage
-from situr.transformation import IdentityRoundTransform
 
 from typing import List
 
@@ -22,7 +21,7 @@ class Tile:
         for situ_image_list in file_list:
             self.images.append(
                 SituImage(situ_image_list, nucleaus_channel=nucleaus_channel))
-            self.round_transformations.append(IdentityRoundTransform())
+            self.round_transformations.append(IdentityTransform())
 
     def apply_transformations(self):
         # first apply channel transformations then round transformations
@@ -35,9 +34,9 @@ class Tile:
 
     def apply_round_transformations(self):
         for round, transformation in enumerate(self.round_transformations):
-            transformation.apply_tranformation(self, round)
+            self.images[round].apply_transform_to_whole_image(transformation)
 
-    def set_round_transformation(self, round, transformation: RoundTransform):
+    def set_round_transformation(self, round, transformation: Transform):
         self.round_transformations[round] = transformation
 
     def get_round_count(self) -> int:

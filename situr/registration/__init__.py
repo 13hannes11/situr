@@ -1,4 +1,4 @@
 from .registration import Registration, RegistrationFunction, FilterregRegistrationFunction
 from .channel_registration import ChannelRegistration
 from .round_registration import RoundRegistration
-from .tile_registration import TileRegistration
+from .tile_registration import CombinedRegistration

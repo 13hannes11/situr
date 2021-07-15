@@ -1,11 +1,14 @@
 from situr.image.situ_image import SituImage
-from situr.transformation.channel_transformation import ChannelTransform
 from situr.registration import Registration, RegistrationFunction, FilterregRegistrationFunction
-from situr.transformation import ChannelTransform, ScaleRotateTranslateChannelTransform
 
 
 class ChannelRegistration(Registration):
-    def __init__(self, registration_function: RegistrationFunction[ChannelTransform] = FilterregRegistrationFunction(ScaleRotateTranslateChannelTransform)):
+    def __init__(self, registration_function: RegistrationFunction = FilterregRegistrationFunction()):
+        """Initialize channel registration and tell which registration function to use.
+
+        Args:
+            registration_function (RegistrationFunction, optional): Registration function. Defaults to FilterregRegistrationFunction(ScaleRotateTranslateChannelTransform).
+        """
         super().__init__(registration_function)
 
     def do_channel_registration(self, situ_img: SituImage, reference_channel: int = 0):

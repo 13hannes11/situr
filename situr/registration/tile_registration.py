@@ -18,12 +18,12 @@ class CombinedRegistration:
             tile (Tile): The tile that the registration and transformations are to be performed on.
         """
         # Do channel registration
-        for round in range(tile.get_roundcount()):
-            img = tile.get_image_round(round)
+        for round in range(tile.get_round_count()):
+            img = tile.get_round(round)
             self.channel_registration
 
         tile.apply_channel_transformations()
 
-        round_registration.do_round_registration(tile)
+        self.round_registration.do_round_registration(tile)
 
         tile.apply_round_transformations()

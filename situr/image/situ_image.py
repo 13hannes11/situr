@@ -1,4 +1,5 @@
 import abc
+from situr.transformation.transformation import Transform
 import numpy as np
 from PIL import Image, ImageDraw
 from skimage import img_as_float
@@ -6,7 +7,7 @@ from skimage.feature import blob_dog
 
 from typing import List
 
-from situr.transformation.channel_transformation import ChannelTransform, IdentityChannelTransform
+from situr.transformation import Transform, IdentityTransform
 
 
 def extend_dim(array: np.ndarray):
@@ -63,7 +64,7 @@ class SituImage:
         self.data = None
         self.nucleaus_channel = nucleaus_channel
         self.channel_transformations = [
-            IdentityChannelTransform() for file in file_list
+            IdentityTransform() for file in file_list
         ]
         self.peak_finder = peak_finder
 
@@ -74,9 +75,17 @@ class SituImage:
 
     def apply_transformations(self):
         for i, transformation in enumerate(self.channel_transformations):
-            transformation.apply_transformation(self, i)
+            for focus_level in range(self.get_focus_level_count()):
+                img = self.get_focus_level(i, focus_level)
+                transformation.apply_tranformation(img)
 
-    def set_channel_transformation(self, channel: int, transformation: ChannelTransform):
+    def apply_transform_to_whole_image(self, transform: Transform):
+        for channel in range(self.get_channel_count()):
+            for focus_level in range(self.get_focus_level_count()):
+                img = self.get_focus_level(channel, focus_level)
+                transform.apply_tranformation(img)
+
+    def set_channel_transformation(self, channel: int, transformation: Transform):
         self.channel_transformations[channel] = transformation
 
     def get_channel_count(self) -> int:
