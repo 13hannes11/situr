@@ -20,7 +20,7 @@ class CombinedRegistration:
         # Do channel registration
         for round in range(tile.get_round_count()):
             img = tile.get_round(round)
-            self.channel_registration
+            self.channel_registration.do_channel_registration(img)
 
         tile.apply_channel_transformations()
 
