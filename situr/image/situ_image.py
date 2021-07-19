@@ -39,7 +39,10 @@ class PeakFinderDifferenceOfGaussian(PeakFinder):
         img = img_as_float(img_array)
         peaks = blob_dog(img, min_sigma=self.min_sigma,
                          max_sigma=self.max_sigma, threshold=self.threshold)
-        return peaks[:, 0:2]
+
+        # Swap x and y
+        peaks = peaks[:, [0, 1]] = peaks[:, [1, 0]]
+        return peaks
 
 
 class SituImage:
