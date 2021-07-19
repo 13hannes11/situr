@@ -18,7 +18,7 @@ def extend_dim(array: np.ndarray):
 def remove_dim(array: np.ndarray):
     return array[:, :-1]
 
-
+# TODO: move peak finder out of image and reverse relationship (peakfinder know about image not the other way around)
 class PeakFinder:
     __metaclass__ = abc.ABCMeta
 
