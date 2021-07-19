@@ -143,7 +143,8 @@ class SituImage:
         Returns:
             Image: The image of the specified focus level and channel
         """
-        img = Image.fromarray(self.get_data()[channel, focus_level, :, :])
+        img = Image.fromarray(
+            self.get_data()[channel, focus_level, :, :].astype(np.uint8))
         img.show()
         return img
 
@@ -172,7 +173,8 @@ class SituImage:
         peaks = self.get_channel_peaks(
             channel, focus_level)
 
-        img = Image.fromarray(self.get_data()[channel, focus_level, :, :])
+        img = Image.fromarray(
+            self.get_data()[channel, focus_level, :, :].astype(np.uint8))
         draw = ImageDraw.Draw(img)
         for x, y in zip(peaks[:, 0], peaks[:, 1]):
             draw.ellipse((x - 5, y - 5, x + 5, y + 5),
