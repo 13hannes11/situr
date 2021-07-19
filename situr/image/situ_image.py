@@ -174,10 +174,17 @@ class SituImage:
             channel, focus_level)
 
         img = Image.fromarray(
-            self.get_data()[channel, focus_level, :, :].astype(np.uint8))
+            self.get_data()[channel, focus_level, :, :].astype(np.uint8)).convert('RGB')
         draw = ImageDraw.Draw(img)
+
+        width = 3
+        inner_radius = 5
+        outer_radius = inner_radius + width
+
         for x, y in zip(peaks[:, 0], peaks[:, 1]):
-            draw.ellipse((x - 5, y - 5, x + 5, y + 5),
-                         outline='white', width=3)
+            draw.ellipse((x - inner_radius, y - inner_radius, x + inner_radius, y + inner_radius),
+                         outline='navy', width=width)
+            draw.ellipse((x - outer_radius, y - outer_radius, x + outer_radius, y + outer_radius),
+                         outline='yellow', width=width)
         img.show()
         return img
