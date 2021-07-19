@@ -1,10 +1,6 @@
-import abc
 from situr.transformation.transformation import Transform
 import numpy as np
-from PIL import Image, ImageDraw
-from skimage import img_as_float
-from skimage.feature import blob_dog
-
+from PIL import Image
 from typing import List
 
 from situr.transformation import Transform, IdentityTransform
@@ -17,32 +13,6 @@ def extend_dim(array: np.ndarray):
 
 def remove_dim(array: np.ndarray):
     return array[:, :-1]
-
-# TODO: move peak finder out of image and reverse relationship (peakfinder know about image not the other way around)
-class PeakFinder:
-    __metaclass__ = abc.ABCMeta
-
-    @abc.abstractmethod
-    def find_peaks(self, img_array: np.ndarray) -> np.ndarray:
-        """Finds the peaks in the input image"""
-        raise NotImplementedError(
-            self.__class__.__name__ + '.find_peaks')
-
-
-class PeakFinderDifferenceOfGaussian(PeakFinder):
-    def __init__(self, min_sigma=0.75, max_sigma=3, threshold=0.1):
-        self.min_sigma = min_sigma
-        self.max_sigma = max_sigma
-        self.threshold = threshold
-
-    def find_peaks(self, img_array: np.ndarray) -> np.ndarray:
-        img = img_as_float(img_array)
-        peaks = blob_dog(img, min_sigma=self.min_sigma,
-                         max_sigma=self.max_sigma, threshold=self.threshold)
-
-        # Swap x and y
-        peaks = peaks[:, [0, 1]] = peaks[:, [1, 0]]
-        return peaks
 
 
 class SituImage:
@@ -62,14 +32,13 @@ class SituImage:
     peak_finder : 
     """
 
-    def __init__(self, file_list: List[List[str]], nucleaus_channel: int = 4, peak_finder: PeakFinder = PeakFinderDifferenceOfGaussian()):
+    def __init__(self, file_list: List[List[str]], nucleaus_channel: int = 4):
         self.files = file_list
         self.data = None
         self.nucleaus_channel = nucleaus_channel
         self.channel_transformations = [
             IdentityTransform() for file in file_list
         ]
-        self.peak_finder = peak_finder
 
     def get_data(self) -> np.ndarray:
         if self.data is None:
@@ -136,58 +105,19 @@ class SituImage:
         """
         self.data = None
 
-    def show_channel(self, channel: int, focus_level: int = 0) -> Image:
+    def show_channel(self, channel: int, focus_level: int = 0, img_show=True) -> Image:
         """Prints and returns the specified channel and focus_level of the image.
 
         Args:
             channel (int): The channel that should be used when printing
             focus_level (int, optional): The focus level that should be used. Defaults to 0.
+            img_show (bool, optional): Specifies if img.show is to be called or if just the image should be returned. Defaults to True.
 
         Returns:
             Image: The image of the specified focus level and channel
         """
         img = Image.fromarray(
             self.get_data()[channel, focus_level, :, :].astype(np.uint8))
-        img.show()
-        return img
-
-    def get_channel_peaks(self, channel: int, focus_level: int = 0) -> np.ndarray:
-        """Returns the coordinates of peaks (local maxima) in the specified channel and focus_level. It uses the self.
-
-        Args:
-            channel (int): The channel that should be used when printing
-            focus_level (int, optional): The focus level that should be used. Defaults to 0.
-
-        Returns:
-            np.ndarray: The peaks found by this method as np.array of shape (n, 2)
-        """
-        return self.peak_finder.find_peaks(self.get_data()[channel, focus_level, :, :])
-
-    def show_channel_peaks(self, channel: int, focus_level: int = 0) -> Image:
-        """Returns and shows the found peaks drawn onto the image. Uses get_channel_peaks internally.
-
-        Args:
-            channel (int): The channel that should be used when printing
-            focus_level (int, optional): The focus level that should be used. Defaults to 0.
-
-        Returns:
-            Image: The image of the specified focus level and channel with encircled peaks.
-        """
-        peaks = self.get_channel_peaks(
-            channel, focus_level)
-
-        img = Image.fromarray(
-            self.get_data()[channel, focus_level, :, :].astype(np.uint8)).convert('RGB')
-        draw = ImageDraw.Draw(img)
-
-        width = 3
-        inner_radius = 5
-        outer_radius = inner_radius + width
-
-        for x, y in zip(peaks[:, 0], peaks[:, 1]):
-            draw.ellipse((x - inner_radius, y - inner_radius, x + inner_radius, y + inner_radius),
-                         outline='navy', width=width)
-            draw.ellipse((x - outer_radius, y - outer_radius, x + outer_radius, y + outer_radius),
-                         outline='yellow', width=width)
-        img.show()
+        if img_show:
+            img.show()
         return img

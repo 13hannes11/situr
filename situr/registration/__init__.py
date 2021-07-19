@@ -2,3 +2,4 @@ from .registration import Registration, RegistrationFunction, FilterregRegistrat
 from .channel_registration import ChannelRegistration
 from .round_registration import RoundRegistration
 from .tile_registration import CombinedRegistration
+from .peak_finder import PeakFinder, PeakFinderDifferenceOfGaussian
