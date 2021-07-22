@@ -2,7 +2,10 @@ import abc
 import numpy as np
 import scipy
 
+
 class Transform:
+    """Abstract class representing a transformatio that can be performed on an image.
+    """
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
@@ -12,13 +15,21 @@ class Transform:
 
 
 class IdentityTransform(Transform):
+    """A transformation that does not change the image.
+        It inherits from Transform.
+    """
+
     def apply_tranformation(self, img: np.ndarray) -> np.ndarray:
         return img
 
 
 class ScaleRotateTranslateTransform(Transform):
-    def __init__(self, transform_matrix: np.ndarray, scale: int = 1, offset: np.array = np.array([0, 0])):
-        """Constructor for a Transformation that supports rotation, translation and scaling on an image
+    def __init__(self,
+                 transform_matrix: np.ndarray,
+                 scale: int = 1,
+                 offset: np.array = np.array([0, 0])):
+        """Constructor for a Transformation that supports rotation, translation and scaling on an
+            image
 
         Args:
             transform_matrix (np.ndarray): A matrix of shape (2,2)
