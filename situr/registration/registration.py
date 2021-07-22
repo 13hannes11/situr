@@ -54,6 +54,24 @@ class FilterregRegistrationFunction(RegistrationFunction):
                                              scale=tf_param.scale, offset=tf_param.t[0:2])
 
 
+class IcpRegistrationFunction(RegistrationFunction):
+    def __init__(self, max_correspondence_distance=50) -> None:
+        self.max_distance = max_correspondence_distance
+
+    def do_registration(self,
+                        data_peaks: np.ndarray,
+                        reference_peaks: np.ndarray) -> ScaleRotateTranslateTransform:
+        source = o3.geometry.PointCloud()
+        source.points = o3.utility.Vector3dVector(extend_dim(data_peaks))
+        target = o3.geometry.PointCloud()
+        target.points = o3.utility.Vector3dVector(extend_dim(reference_peaks))
+        reg_p2p = o3.pipelines.registration.registration_icp(
+            source, target, 200)
+        print('Transformation: ')
+        print(reg_p2p.transformation)
+        return ScaleRotateTranslateTransform(reg_p2p.transformation[0:2, 0:2])
+
+
 class Registration:
     __metaclass__ = abc.ABCMeta
 
