@@ -17,7 +17,8 @@ class PeakFinder:
             self.__class__.__name__ + '.find_peaks')
 
     def get_channel_peaks(self, img: SituImage, channel: int, focus_level: int = 0) -> np.ndarray:
-        """Returns the coordinates of peaks (local maxima) in the specified channel and focus_level. It uses the self.
+        """Returns the coordinates of peaks (local maxima) in the specified channel and focus_level.
+            It uses the method find_peaks.
 
         Args:
             img (SituImage): The image to find the peaks on.
@@ -29,14 +30,20 @@ class PeakFinder:
         """
         return self.find_peaks(img.get_data()[channel, focus_level, :, :])
 
-    def show_channel_peaks(self, img: SituImage, channel: int, focus_level: int = 0, img_show=True) -> Image:
-        """Returns and shows the found peaks drawn onto the image. Uses get_channel_peaks internally.
+    def show_channel_peaks(self,
+                           img: SituImage,
+                           channel: int,
+                           focus_level: int = 0,
+                           img_show=True) -> Image:
+        """Returns and shows the found peaks drawn onto the image.
+            Uses get_channel_peaks internally.
 
         Args:
             img (SituImage): The image to find the peaks on.
             channel (int): The channel that should be used when printing
             focus_level (int, optional): The focus level that should be used. Defaults to 0.
-            img_show (bool, optional): Specifies if img.show is to be called or if just the image should be returned. Defaults to True.
+            img_show (bool, optional): Specifies if img.show is to be called or if just the image
+                should be returned. Defaults to True.
 
         Returns:
             Image: The image of the specified focus level and channel with encircled peaks.
@@ -62,12 +69,32 @@ class PeakFinder:
 
 
 class PeakFinderDifferenceOfGaussian(PeakFinder):
+    """A class using difference of gaussian to find peaks. It uses skimage blob_dog internally.
+
+    ...
+
+    Attributes
+    ----------
+    min_sigma (float)
+    max_sigma (int)
+    threshold (float)
+    """
     def __init__(self, min_sigma=0.75, max_sigma=3, threshold=0.1):
+        """ For more detailed information about the parameters in the constructor
+            refer to blob_dog from skimage.feature.
+
+        Args:
+            min_sigma (float, optional): Defaults to 0.75.
+            max_sigma (int, optional): Defaults to 3.
+            threshold (float, optional): Defaults to 0.1.
+        """
         self.min_sigma = min_sigma
         self.max_sigma = max_sigma
         self.threshold = threshold
 
     def find_peaks(self, img_array: np.ndarray) -> np.ndarray:
+        """Finds the peaks in the input image"""
+
         img = img_as_float(img_array)
         peaks = blob_dog(img, min_sigma=self.min_sigma,
                          max_sigma=self.max_sigma, threshold=self.threshold)
