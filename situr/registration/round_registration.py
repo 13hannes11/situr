@@ -1,19 +1,26 @@
+from situr.image.situ_tile import Tile
+import numpy as np
+
 from situr.registration import Registration, RegistrationFunction, FilterregRegistrationFunction
 
-import numpy as np
 
 class RoundRegistration(Registration):
 
-    def do_round_registration(self, situ_tile, reference_round: int = 0, reference_channel: int = 0):
-        """This method generates a round registration transformation for a tile and saves it in the tile. 
+    def do_round_registration(self,
+                              situ_tile,
+                              reference_round: int = 0,
+                              reference_channel: int = 0):
+        """This method generates a round registration transformation for a tile
+            and saves it in the tile.
 
         Args:
             situ_tile (Tile): The tile that the transformation is to be performed on.
-            reference_round (int, optional): The round that is referenced and will not be changed. Defaults to 0.
-            reference_channel (int, optional): The channel tha is used to compare rounds. Defaults to 0.
+            reference_round (int, optional): The round that is referenced and will not be changed.
+                Defaults to 0.
+            reference_channel (int, optional): The channel that is used to compare rounds.
+                Defaults to 0.
         """
 
-        # TODO: instead of one reference channel use all channels (maybe without nucleus channel)
         reference_peaks = self.peak_finder.get_channel_peaks(situ_tile.get_round(
             reference_round), reference_channel)
         for round in range(situ_tile.get_round_count()):
@@ -26,13 +33,21 @@ class RoundRegistration(Registration):
 
 
 class AllChannelRoundRegistration(RoundRegistration):
+    """This class perofrms a round registration using all channels instead of just the reference
+        channel. It inherits from RoundRegistration.
+    """
 
-    def do_round_registration(self, situ_tile, reference_round: int = 0, reference_channel: int = 0):
-        """This method generates a round registration transformation for a tile and saves it in the tile. 
+    def do_round_registration(self,
+                              situ_tile: Tile,
+                              reference_round: int = 0,
+                              reference_channel: int = 0):
+        """This method generates a round registration transformation for a tile and saves it in
+            the tile.
 
         Args:
             situ_tile (Tile): The tile that the transformation is to be performed on.
-            reference_round (int, optional): The round that is referenced and will not be changed. Defaults to 0.
+            reference_round (int, optional): The round that is referenced and will not be changed.
+                Defaults to 0.
             reference_channel (int, optional): This parameter is ignored.
         """
         reference_peaks = []
