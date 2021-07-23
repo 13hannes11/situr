@@ -66,10 +66,10 @@ class IcpRegistrationFunction(RegistrationFunction):
         target = o3.geometry.PointCloud()
         target.points = o3.utility.Vector3dVector(extend_dim(reference_peaks))
         reg_p2p = o3.pipelines.registration.registration_icp(
-            source, target, 200)
-        print('Transformation: ')
-        print(reg_p2p.transformation)
-        return ScaleRotateTranslateTransform(reg_p2p.transformation[0:2, 0:2])
+            source, target, self.max_distance)
+        return ScaleRotateTranslateTransform(
+            reg_p2p.transformation[0:2, 0:2],
+            offset=reg_p2p.transformation[[1, 0], 3])
 
 
 class Registration:
