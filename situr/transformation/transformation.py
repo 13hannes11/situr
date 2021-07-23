@@ -23,7 +23,7 @@ class IdentityTransform(Transform):
         return img
 
 
-class ScaleRotateTranslateTransform(Transform):
+class RotateTranslateTransform(Transform):
     def __init__(self,
                  transform_matrix: np.ndarray,
                  scale: int = 1,

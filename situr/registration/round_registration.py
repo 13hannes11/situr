@@ -1,7 +1,7 @@
 from situr.image.situ_tile import Tile
 import numpy as np
 
-from situr.registration import Registration, RegistrationFunction, FilterregRegistrationFunction
+from situr.registration import Registration, RegistrationFunction, IcpRegistrationFunction
 
 
 class RoundRegistration(Registration):

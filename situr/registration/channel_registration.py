@@ -4,7 +4,7 @@ from situr.image import situ_image
 from situr.image.situ_tile import Tile
 from situr.registration.peak_finder import PeakFinder, PeakFinderDifferenceOfGaussian
 from situr.image.situ_image import SituImage
-from situr.registration import Registration, RegistrationFunction, FilterregRegistrationFunction
+from situr.registration import Registration, RegistrationFunction, IcpRegistrationFunction
 
 
 class SituImageChannelRegistration(Registration):

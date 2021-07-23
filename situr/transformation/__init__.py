@@ -1,1 +1,1 @@
-from .transformation import Transform, IdentityTransform, ScaleRotateTranslateTransform
+from .transformation import Transform, IdentityTransform, RotateTranslateTransform
