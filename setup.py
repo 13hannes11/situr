@@ -10,6 +10,7 @@ setup(name='situr',
       packages=find_namespace_packages(include=['situr.*']),
       install_requires=[
           'numpy>=1.21.0',
+          'matplotlib>=3.4.0',
           'open3d>=0.13.0',
           'Pillow>=8.3.1',
           'scikit-image>=0.18.2',

@@ -3,6 +3,7 @@ from PIL import Image, ImageDraw
 from skimage import img_as_float
 from skimage.feature import blob_dog
 import numpy as np
+from matplotlib import pyplot as plt
 
 from situr.image.situ_image import SituImage
 
@@ -29,6 +30,18 @@ class PeakFinder:
             np.ndarray: np.ndarray: The peaks found by this method as np.array of shape (n, 2)
         """
         return self.find_peaks(img.get_data()[channel, focus_level, :, :])
+
+    def scatterplot_channel_peaks(self,
+                                  img: SituImage,
+                                  channel: int,
+                                  focus_level: int = 0,
+                                  color='b'):
+        peaks = self.get_channel_peaks(img, channel, focus_level)
+
+        # TODO: test with non square image if right coordinates
+        plt.xlim(0, img.get_focus_level(0, 0).shape[1])
+        plt.ylim(0, img.get_focus_level(0, 0).shape[0])
+        plt.scatter(peaks[:, 0], peaks[:, 1], color=color)
 
     def show_channel_peaks(self,
                            img: SituImage,
