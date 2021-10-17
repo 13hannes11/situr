@@ -117,5 +117,4 @@ class Tile:
             np.ndarray: The loaded image of shape (focus_level, width, height)
         """
 
-        return self.get_data()[channel, :, :, :]
         return self.images[round].get_channel(channel)
