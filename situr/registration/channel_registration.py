@@ -45,7 +45,8 @@ class ChannelRegistration(Registration):
             reference_channel (int, optional): the reference channel that all channels are
                 registered against. Defaults to 0.
         """
-        registration = SituImageChannelRegistration()
+        
+        registration = SituImageChannelRegistration(self.registration_function, peak_finder=self.peak_finder)
         # For each channel (except nucleus) compute transform compared to reference_channel
         # Add Channel transformation to Channel
         for round in range(tile.get_round_count()):
