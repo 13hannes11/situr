@@ -1,7 +1,6 @@
 import abc
 from situr.registration.peak_finder import PeakFinderDifferenceOfGaussian
 import open3d as o3
-from probreg import filterreg
 import numpy as np
 
 from situr.image import extend_dim
